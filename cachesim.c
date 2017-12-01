@@ -1,4 +1,4 @@
-#define AMAX 10			/* Maximum (square) array size */
+#define AMAX 4			/* Maximum (square) array size */
 
 #include <stdio.h>
 
@@ -66,27 +66,17 @@ int main(void)
 {
     int r1, c1, r2, c2, i, j;
 
-    printf("Enter rows and column for first matrix: ");
-    scanf("%d%d", &r1, &c1);
-    printf("Enter rows and column for second matrix: ");
-    scanf("%d%d",&r2, &c2);
-
-    /* If column of first matrix in not equal to row of second matrix, asking user to enter the size of matrix again. */
-    while (c1 != r2)
-    {
-        printf("Error! column of first matrix not equal to row of second.\n");
-        printf("Enter rows and column for first matrix: ");
-        scanf("%d%d", &r1, &c1);
-        printf("Enter rows and column for second matrix: ");
-        scanf("%d%d",&r2, &c2);
-    }
+    r1 = AMAX;
+    r2 = AMAX;
+    c1 = AMAX;
+    c2 = AMAX;
 
     /* Storing elements of first matrix. */
     for(i=0; i<r1; ++i)
     {
         for(j=0; j<c1; ++j)
         {
-            a[i][j] = i+j; // build sample data
+            a[i][j] = 49*(i+j); // build sample data
 
         }
     }
