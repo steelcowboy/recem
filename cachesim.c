@@ -1,10 +1,11 @@
-#define AMAX 4			/* Maximum (square) array size */
+#define AMAX 2	 /* Maximum (square) array size, either 2 or 10 */
+#define CWRD 16  /* Either 16 or 256 */
+#define ASS  1   /* 1, 2, or 4 */
 
 #include <stdio.h>
 
 /*	memory management, code density, Cache emulation - statistics generation */
 /*	Generated for CSC 315 Lab 5 */
-
 
 /* This function gets called with each "read" reference to memory */
 void mem_read(int *mp)
@@ -22,9 +23,11 @@ void mem_write(int *mp)
 
 }
 
-
 /* Statically define the arrays a, b, and mult, where mult will become the cross product of a and b, i.e., a x b. */
 static int a[AMAX][AMAX], b[AMAX][AMAX], mult[AMAX][AMAX];
+static int CACHE[CWRD]; 
+static size_t HITS;
+static size_t MISS;
 
 void matmul(int r1, int c1, int c2 )
 {
