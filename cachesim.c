@@ -1,6 +1,6 @@
-#define AMAX 2	 /* Maximum (square) array size, either 2 or 10 */
-#define CWRD 16  /* Cache size: Either 16 or 256 words */
-#define ASS  1   /* Cache associativity: 1, 2, or 4 way */
+#define AMAX 10	 /* Maximum (square) array size, either 2 or 10 */
+#define CWRD 256  /* Cache size: Either 16 or 256 words */
+#define ASS  4   /* Cache associativity: 1, 2, or 4 way */
 
 #include <stdio.h>
 
@@ -19,6 +19,8 @@ static int a[AMAX][AMAX], b[AMAX][AMAX], mult[AMAX][AMAX];
 static int CACHE[CWRD]; 
 static size_t HITS;
 static size_t MISS;
+static int READS;
+static int WRITES;
 
 int *cache_addrs[ASS]; /* Cache is one block, so all we need to know to simulate it is
     the starting address and block size.  Associativity is number of blocks. */
@@ -27,6 +29,7 @@ int next_evict = 0; /* Rount robin cache eviction */
 /* This function gets called with each "read" reference to memory */
 void mem_read(int *mp)
 {
+    READS++;
     (void) mp;
     int foundCache = 0;
     /* Check if address is in range of current cache */
@@ -45,12 +48,13 @@ void mem_read(int *mp)
         }
     }
     /* printf("Memory read from location %p\n", mp);  */
-
+    
 }
 
 /* This function gets called with each "write" reference to memory */
 void mem_write(int *mp)
 {
+    WRITES++;
     (void) mp;
     MISS++; /* Write-through */
     int foundCache = 0;
@@ -105,6 +109,8 @@ void matmul(int r1, int c1, int c2 )
             }
         }
     }
+    printf("Ratio of read to write accesses: %d\n\n", READS/WRITES);
+    printf("Hit rate for cache: %lu\n\n", (HITS*100/(HITS+MISS)));
 }
 
 int main(void)
