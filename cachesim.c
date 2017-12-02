@@ -16,11 +16,28 @@
 
 int *cache_addrs[ASS]; /* Cache is one block, so all we need to know to simulate it is
     the starting address and block size.  Associativity is number of blocks. */
+int next_evict = 0; /* Rount robin cache eviction */
 
 /* This function gets called with each "read" reference to memory */
 void mem_read(int *mp)
 {
     (void) mp;
+    int foundCache = 0;
+    /* Check if address is in range of current cache */
+    for (int i = 0; i < ASS; i++){ // Check each "way" of cache associativity
+        if (mp >= cache_addrs[i] && mp < (cache_addrs[i] + ASS)){
+            foundCache = 1;
+        }
+    }
+    if(foundCache){ // Hit
+        HITS++;
+    }else{ // Miss
+        MISS++;
+        cache_addrs[next_evict] = mp; /* Start block at requested address */
+        if(++next_evict >= ASS){ // Increment next_evict
+            next_evict = 0;
+        }
+    }
     /* printf("Memory read from location %p\n", mp);  */
 
 }
@@ -29,6 +46,21 @@ void mem_read(int *mp)
 void mem_write(int *mp)
 {
     (void) mp;
+    MISS++; /* Write-through */
+    int foundCache = 0;
+    /* Check if address is in range of current cache */
+    for (int i = 0; i < ASS; i++){ // Check each "way" of cache associativity
+        if (mp >= cache_addrs[i] && mp < (cache_addrs[i] + ASS)){
+            foundCache = 1;
+        }
+    }
+    if(!foundCache){ // Miss
+        MISS++;
+        cache_addrs[next_evict] = mp; /* Start block at requested address */
+        if(++next_evict >= ASS){ // Increment next_evict
+            next_evict = 0;
+        }
+    }
     /* printf("Memory write to location %p\n", mp); */
 
 }
