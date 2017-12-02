@@ -14,6 +14,12 @@
 
 //cache_entry cache[CWRD];
 
+/* Statically define the arrays a, b, and mult, where mult will become the cross product of a and b, i.e., a x b. */
+static int a[AMAX][AMAX], b[AMAX][AMAX], mult[AMAX][AMAX];
+static int CACHE[CWRD]; 
+static size_t HITS;
+static size_t MISS;
+
 int *cache_addrs[ASS]; /* Cache is one block, so all we need to know to simulate it is
     the starting address and block size.  Associativity is number of blocks. */
 int next_evict = 0; /* Rount robin cache eviction */
@@ -64,12 +70,6 @@ void mem_write(int *mp)
     /* printf("Memory write to location %p\n", mp); */
 
 }
-
-/* Statically define the arrays a, b, and mult, where mult will become the cross product of a and b, i.e., a x b. */
-static int a[AMAX][AMAX], b[AMAX][AMAX], mult[AMAX][AMAX];
-static int CACHE[CWRD]; 
-static size_t HITS;
-static size_t MISS;
 
 void matmul(int r1, int c1, int c2 )
 {
