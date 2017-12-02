@@ -7,12 +7,15 @@
 /*	memory management, code density, Cache emulation - statistics generation */
 /*	Generated for CSC 315 Lab 5 */
 
-typedef struct cache_entry {
-    int* location[ASS]; /* Memory addresses of cache entries */
-    int next_evict; /* Next n-way cache entry to evict for round robin implementation */
-} cache_entry;
+//typedef struct cache_entry {
+//    int* location[ASS]; /* Memory addresses of cache entries */
+//    int next_evict; /* Next n-way cache entry to evict for round robin implementation */
+//} cache_entry;
 
-cache_entry cache[CWRD];
+//cache_entry cache[CWRD];
+
+int *cache_addrs[ASS]; /* Cache is one block, so all we need to know to simulate it is
+    the starting address and block size.  Associativity is number of blocks. */
 
 /* This function gets called with each "read" reference to memory */
 void mem_read(int *mp)
